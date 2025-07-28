@@ -1,0 +1,423 @@
+{
+  "auth": [
+    {
+      "id": "1",
+      "username": "admin",
+      "password": "123456",
+      "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9",
+      "user": {
+        "id": 1,
+        "name": "管理员",
+        "email": "admin@example.com",
+        "role": "admin"
+      }
+    },
+    {
+      "id": "c14a",
+      "username": "admin",
+      "password": "123456"
+    }
+  ],
+  "userProfiles": [
+    {
+      "id": "1",
+      "name": "管理员1",
+      "email": "admin@example.com",
+      "phone": "13800138000",
+      "role": "admin",
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=1_1753700995290",
+      "department": "系统管理部",
+      "joinDate": "2023-01-01",
+      "bio": "系统管理员，负责平台的整体运营和维护工作。",
+      "lastLoginTime": "2024-01-15 09:30:00",
+      "loginCount": 156,
+      "status": "active",
+      "settings": {
+        "twoFactorEnabled": false,
+        "emailNotifications": true,
+        "smsNotifications": false
+      },
+      "settings.twoFactorEnabled": false
+    },
+    {
+      "id": "2",
+      "name": "张三",
+      "email": "zhangsan@example.com",
+      "phone": "13900139000",
+      "role": "manager",
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=zhangsan",
+      "department": "销售部",
+      "joinDate": "2023-03-15",
+      "bio": "销售部经理，负责销售团队管理和业务拓展。",
+      "lastLoginTime": "2024-01-14 16:45:00",
+      "loginCount": 89,
+      "status": "active",
+      "settings": {
+        "twoFactorEnabled": true,
+        "emailNotifications": true,
+        "smsNotifications": true
+      }
+    }
+  ],
+  "passwordChangeRequests": [],
+  "users": [
+    {
+      "id": "1",
+      "name": "张三",
+      "email": "zhangsan@example.com",
+      "role": "管理员",
+      "status": "活跃"
+    },
+    {
+      "id": "2",
+      "name": "李四",
+      "email": "lisi@example.com",
+      "role": "员工",
+      "status": "活跃"
+    }
+  ],
+  "products": [
+    {
+      "id": "1",
+      "name": "有机苹果",
+      "category": "水果",
+      "price": 8.99,
+      "stock": 85,
+      "sales": 1250,
+      "profit": 375,
+      "image": "/images/apple.jpg"
+    },
+    {
+      "id": "2",
+      "name": "进口牛奶",
+      "category": "乳制品",
+      "price": 12.5,
+      "stock": 92,
+      "sales": 980,
+      "profit": 294,
+      "image": "/images/milk.jpg"
+    },
+    {
+      "id": "3",
+      "name": "精选大米",
+      "category": "粮油",
+      "price": 25,
+      "stock": 78,
+      "sales": 850,
+      "profit": 170,
+      "image": "/images/rice.jpg"
+    },
+    {
+      "id": "4",
+      "name": "新鲜鸡蛋",
+      "category": "蛋类",
+      "price": 18,
+      "stock": 95,
+      "sales": 720,
+      "profit": 144,
+      "image": "/images/eggs.jpg"
+    },
+    {
+      "id": "5",
+      "name": "优质面包",
+      "category": "烘焙",
+      "price": 15,
+      "stock": 68,
+      "sales": 650,
+      "profit": 195,
+      "image": "/images/bread.jpg"
+    }
+  ],
+  "orders": [
+    {
+      "id": "1",
+      "customer": "张三",
+      "amount": 128,
+      "status": "已完成",
+      "date": "2024-01-15 14:21",
+      "items": [
+        {
+          "productId": "1",
+          "quantity": 5,
+          "price": 8.99
+        },
+        {
+          "productId": "3",
+          "quantity": 2,
+          "price": 25
+        }
+      ]
+    },
+    {
+      "id": "2",
+      "customer": "李四",
+      "amount": 256.5,
+      "status": "处理中",
+      "date": "2024-01-15 13:10",
+      "items": [
+        {
+          "productId": "2",
+          "quantity": 8,
+          "price": 12.5
+        },
+        {
+          "productId": "4",
+          "quantity": 6,
+          "price": 18
+        }
+      ]
+    },
+    {
+      "id": "3",
+      "customer": "王五",
+      "amount": 512.25,
+      "status": "已完成",
+      "date": "2024-01-15 12:50",
+      "items": [
+        {
+          "productId": "5",
+          "quantity": 10,
+          "price": 15
+        },
+        {
+          "productId": "1",
+          "quantity": 20,
+          "price": 8.99
+        }
+      ]
+    }
+  ],
+  "dashboard": {
+    "realTimeMetrics": {
+      "currentSales": 15420,
+      "onlineUsers": 1286,
+      "conversionRate": 3.2,
+      "avgOrderValue": 128.5,
+      "todayOrders": 128,
+      "totalProducts": 568
+    },
+    "coreMetrics": [
+      {
+        "id": "sales",
+        "title": "实时销售额",
+        "dataKey": "currentSales",
+        "prefix": "¥",
+        "value": "2131",
+        "suffix": "",
+        "color": "#1890ff",
+        "trend": "+12.5%",
+        "trendUp": true,
+        "description": "较昨日同期"
+      },
+      {
+        "id": "users",
+        "title": "在线用户",
+        "dataKey": "onlineUsers",
+        "prefix": "",
+        "value": "1286",
+        "suffix": "人",
+        "color": "#52c41a",
+        "trend": "+8.2%",
+        "trendUp": true,
+        "description": "当前在线"
+      },
+      {
+        "id": "conversion",
+        "title": "转化率",
+        "dataKey": "conversionRate",
+        "prefix": "",
+        "value": "3.2",
+        "suffix": "%",
+        "color": "#faad14",
+        "trend": "-0.3%",
+        "trendUp": false,
+        "description": "今日平均"
+      },
+      {
+        "id": "avgOrder",
+        "title": "客单价",
+        "dataKey": "avgOrderValue",
+        "prefix": "¥",
+        "value": "128.5",
+        "suffix": "",
+        "color": "#f5222d",
+        "trend": "+5.8%",
+        "trendUp": true,
+        "description": "今日平均"
+      }
+    ],
+    "salesTrend": [
+      {
+        "time": "00:00",
+        "sales": 1200,
+        "orders": 45,
+        "visitors": 320
+      },
+      {
+        "time": "04:00",
+        "sales": 800,
+        "orders": 28,
+        "visitors": 180
+      },
+      {
+        "time": "08:00",
+        "sales": 2800,
+        "orders": 95,
+        "visitors": 650
+      },
+      {
+        "time": "12:00",
+        "sales": 4200,
+        "orders": 142,
+        "visitors": 980
+      },
+      {
+        "time": "16:00",
+        "sales": 3600,
+        "orders": 128,
+        "visitors": 850
+      },
+      {
+        "time": "20:00",
+        "sales": 2400,
+        "orders": 86,
+        "visitors": 520
+      },
+      {
+        "time": "23:59",
+        "sales": 1800,
+        "orders": 62,
+        "visitors": 380
+      }
+    ],
+    "categoryStats": [
+      {
+        "name": "水果蔬菜",
+        "value": 35,
+        "color": "#1890ff"
+      },
+      {
+        "name": "肉类海鲜",
+        "value": 25,
+        "color": "#52c41a"
+      },
+      {
+        "name": "乳制品",
+        "value": 15,
+        "color": "#faad14"
+      },
+      {
+        "name": "粮油调料",
+        "value": 12,
+        "color": "#f5222d"
+      },
+      {
+        "name": "零食饮料",
+        "value": 8,
+        "color": "#722ed1"
+      },
+      {
+        "name": "其他",
+        "value": 5,
+        "color": "#13c2c2"
+      }
+    ],
+    "hourlyAnalysis": [
+      {
+        "hour": "6-8",
+        "sales": 1200,
+        "traffic": 85
+      },
+      {
+        "hour": "8-10",
+        "sales": 2800,
+        "traffic": 92
+      },
+      {
+        "hour": "10-12",
+        "sales": 3200,
+        "traffic": 88
+      },
+      {
+        "hour": "12-14",
+        "sales": 4200,
+        "traffic": 95
+      },
+      {
+        "hour": "14-16",
+        "sales": 2800,
+        "traffic": 78
+      },
+      {
+        "hour": "16-18",
+        "sales": 3600,
+        "traffic": 90
+      },
+      {
+        "hour": "18-20",
+        "sales": 4800,
+        "traffic": 98
+      },
+      {
+        "hour": "20-22",
+        "sales": 2400,
+        "traffic": 82
+      }
+    ],
+    "regionStats": [
+      {
+        "region": "华东区",
+        "sales": 125000,
+        "growth": 15.2,
+        "customers": 2580
+      },
+      {
+        "region": "华南区",
+        "sales": 98000,
+        "growth": 12.8,
+        "customers": 1950
+      },
+      {
+        "region": "华北区",
+        "sales": 87000,
+        "growth": 8.5,
+        "customers": 1680
+      },
+      {
+        "region": "西南区",
+        "sales": 65000,
+        "growth": 18.9,
+        "customers": 1320
+      },
+      {
+        "region": "华中区",
+        "sales": 52000,
+        "growth": 6.2,
+        "customers": 1080
+      }
+    ],
+    "alerts": [
+      {
+        "type": "warning",
+        "message": "收银台2号排队人数过多",
+        "time": "2分钟前"
+      },
+      {
+        "type": "info",
+        "message": "促销活动效果良好，转化率提升15%",
+        "time": "5分钟前"
+      },
+      {
+        "type": "error",
+        "message": "冷藏区温度异常，请及时检查",
+        "time": "8分钟前"
+      }
+    ],
+    "prediction": {
+      "nextHourSales": 3200,
+      "confidence": 87,
+      "recommendation": "建议增加收银台开放数量",
+      "riskAlert": "库存预警：有机苹果预计2小时内售罄"
+    }
+  }
+}
