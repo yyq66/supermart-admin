@@ -28,7 +28,7 @@ import {
   SafetyOutlined
 } from '@ant-design/icons';
 import type { UploadProps } from 'antd';
-import { userAPI } from '../services/api';
+import { userInfoAPI } from '../services/api';
 
 interface UserInfo {
   id: string;
@@ -59,23 +59,24 @@ const Profile: React.FC = () => {
   const [passwordModalVisible, setPasswordModalVisible] = useState(false);
   const [userInfo, setUserInfo] = useState<UserInfo | null>(null);
 
+  useEffect(() => {
+    loadUserInfo();
+  }, []);
+
   // 加载用户信息
   const loadUserInfo = async () => {
     try {
       setPageLoading(true);
-      const data = await userAPI.getCurrentUserProfile();
-      setUserInfo(data);
-      form.setFieldsValue(data);
+      const response = await userInfoAPI.getUserProfile();
+      console.log(response.data)
+      setUserInfo(response.data);
+      form.setFieldsValue(response.data);
     } catch (error) {
       message.error('加载用户信息失败');
     } finally {
       setPageLoading(false);
     }
   };
-
-  useEffect(() => {
-    loadUserInfo();
-  }, []);
 
   const handleEdit = () => {
     setEditing(true);
@@ -89,16 +90,16 @@ const Profile: React.FC = () => {
 
   const handleSave = async (values: any) => {
     if (!userInfo) return;
-    
+
     try {
       setLoading(true);
-      const updatedUser = await userAPI.updateUserProfile(userInfo.id, {
+      const updatedUser = await userInfoAPI.updateUserProfile({
         ...userInfo,
         ...values
       });
-      
+
       setUserInfo(updatedUser);
-      
+
       // 更新localStorage中的用户信息
       const currentUser = JSON.parse(localStorage.getItem('user') || '{}');
       localStorage.setItem('user', JSON.stringify({
@@ -106,7 +107,7 @@ const Profile: React.FC = () => {
         name: updatedUser.name,
         email: updatedUser.email
       }));
-      
+
       setEditing(false);
       message.success('个人信息更新成功！');
     } catch (error) {
@@ -119,10 +120,10 @@ const Profile: React.FC = () => {
   // 头像上传处理
   const handleAvatarUpload = async (file: File) => {
     if (!userInfo) return;
-    
+
     try {
       setLoading(true);
-      const result = await userAPI.uploadAvatar(userInfo.id, file);
+      const result = await userInfoAPI.uploadAvatar(userInfo.id, file);
       setUserInfo(prev => prev ? { ...prev, avatar: result.avatarUrl } : null);
       message.success('头像更新成功！');
     } catch (error) {
@@ -148,7 +149,7 @@ const Profile: React.FC = () => {
         message.error('图片大小不能超过 2MB!');
         return false;
       }
-      
+
       handleAvatarUpload(file);
       return false; // 阻止自动上传
     },
@@ -157,14 +158,14 @@ const Profile: React.FC = () => {
   // 修改密码
   const handlePasswordChange = async (values: any) => {
     if (!userInfo) return;
-    
+
     try {
       setLoading(true);
-      await userAPI.changePassword(userInfo.id, {
+      await userInfoAPI.changePassword({
         currentPassword: values.currentPassword,
         newPassword: values.newPassword
       });
-      
+
       setPasswordModalVisible(false);
       passwordForm.resetFields();
       message.success('密码修改成功！');
@@ -178,9 +179,9 @@ const Profile: React.FC = () => {
   // 切换两步验证
   const handleTwoFactorToggle = async (enabled: boolean) => {
     if (!userInfo) return;
-    
+
     try {
-      await userAPI.toggleTwoFactor(userInfo.id, enabled);
+      await userInfoAPI.toggleTwoFactor(userInfo.id, enabled);
       setUserInfo(prev => prev ? {
         ...prev,
         settings: { ...prev.settings!, twoFactorEnabled: enabled }
@@ -237,12 +238,12 @@ const Profile: React.FC = () => {
                 <CameraOutlined /> 点击头像更换
               </div>
             </div>
-            
+
             <h2 className="text-xl font-bold mb-2">{userInfo.name}</h2>
             <div className="mb-4">{getRoleTag(userInfo.role)}</div>
-            
+
             <Divider />
-            
+
             <Space direction="vertical" className="w-full text-left">
               <div className="flex items-center">
                 <MailOutlined className="mr-2 text-gray-500" />
@@ -372,7 +373,7 @@ const Profile: React.FC = () => {
                   <p className="text-gray-500 text-sm mb-3">
                     定期更换密码可以提高账户安全性
                   </p>
-                  <Button 
+                  <Button
                     icon={<LockOutlined />}
                     onClick={() => setPasswordModalVisible(true)}
                   >
@@ -387,6 +388,7 @@ const Profile: React.FC = () => {
                     <Switch
                       checked={userInfo.settings?.twoFactorEnabled}
                       onChange={handleTwoFactorToggle}
+                      disabled={true}
                     />
                   </div>
                   <p className="text-gray-500 text-sm mb-3">
@@ -424,7 +426,7 @@ const Profile: React.FC = () => {
           >
             <Input.Password placeholder="请输入当前密码" />
           </Form.Item>
-          
+
           <Form.Item
             label="新密码"
             name="newPassword"
@@ -435,7 +437,7 @@ const Profile: React.FC = () => {
           >
             <Input.Password placeholder="请输入新密码" />
           </Form.Item>
-          
+
           <Form.Item
             label="确认新密码"
             name="confirmPassword"
@@ -454,7 +456,7 @@ const Profile: React.FC = () => {
           >
             <Input.Password placeholder="请确认新密码" />
           </Form.Item>
-          
+
           <Form.Item className="mb-0">
             <Space className="w-full justify-end">
               <Button onClick={() => {

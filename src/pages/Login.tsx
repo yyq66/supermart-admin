@@ -25,10 +25,13 @@ const Login = () => {
     try {
       setLoading(true);
       const result = await loginAPI(values)
+      console.log("result:",result)
       if (result.code === 200) {
-        login(result.data.token, result.data.userInfo);
+        login(result.data.token, result.data.user);
         message.success(result.message);
         navigate('/dashboard');
+      }else{
+        message.error(result.message);
       }
     } catch (error: any) {
       message.error(error.message || '登录失败');

@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
-import { Table, Card, Button, Space, Modal, Form, Input, Select, message } from 'antd';
+import { Table, Card, Button, Space, Modal, Form, Input, Select, message, Tooltip } from 'antd';
 import { PlusOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons';
 import type { ColumnsType } from 'antd/es/table';
-import api from '../services/api';
+import { userAPI } from '../services/api';
 
 interface User {
     key: string;
@@ -15,6 +15,7 @@ interface User {
 
 const Users = () => {
     const [users, setUsers] = useState<User[]>([]);
+    const [loading, setLoading] = useState(false);
 
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [editingUser, setEditingUser] = useState<User | null>(null);
@@ -37,24 +38,19 @@ const Users = () => {
     // 获取用户数据
     const getUsers = async () => {
         try {
-            // setLoading(true);
-            const response = await api.get<User[]>('/users');
-            console.log("response:",response);
-            const formattedUsers = response.data.map((user: User)=>({
+            setLoading(true);
+            const response = await userAPI.getUsers();
+            // console.log("response:", response);
+            const formattedUsers = response.data.map((user: User) => ({
                 ...user,
                 key: user.id.toString()
             }))
             setUsers(formattedUsers)
-            // const formattedUsers = response.map((user: any) => ({
-            //     ...user,
-            //     key: user.id.toString()
-            // }));
-            // setUsers(formattedUsers);
         } catch (error) {
             console.error('获取用户数据失败:', error);
             message.error('获取用户数据失败');
         } finally {
-            // setLoading(false);
+            setLoading(false);
         }
     }
 
@@ -64,7 +60,7 @@ const Users = () => {
 
     // 修改columns定义，添加responsive属性
     const columns: ColumnsType<User> = [
-        { title: 'ID', dataIndex: 'id', key: 'id', responsive: ['md'] },
+        // { title: 'ID', dataIndex: 'id', key: 'id', responsive: ['md'] },
         { title: '姓名', dataIndex: 'name', key: 'name' },
         { title: '邮箱', dataIndex: 'email', key: 'email', responsive: ['lg'] },
         { title: '角色', dataIndex: 'role', key: 'role' },
@@ -74,21 +70,22 @@ const Users = () => {
             key: 'action',
             render: (_: React.ReactNode, record: User) => (
                 <Space size="small">
-                    <Button
-                        type="text"
-                        icon={<EditOutlined />}
-                        onClick={() => handleEdit(record)}
-                    >
-                        {!isMobile && '编辑'}
-                    </Button>
-                    <Button
-                        type="text"
-                        danger
-                        icon={<DeleteOutlined />}
-                        onClick={() => handleDelete(record.key)}
-                    >
-                        {!isMobile && '删除'}
-                    </Button>
+                    <Tooltip title="编辑">
+                        <Button
+                            type="text"
+                            icon={<EditOutlined />}
+                            onClick={() => handleEdit(record)}
+                        />
+                    </Tooltip>
+                    <Tooltip title="删除用户">
+                        <Button
+                            type="text"
+                            danger
+                            icon={<DeleteOutlined />}
+                            onClick={() => handleDelete(record.key)}
+                        />
+
+                    </Tooltip>
                 </Space>
             ),
         },
@@ -111,8 +108,10 @@ const Users = () => {
             title: '确认删除',
             content: '确定要删除这个用户吗？',
             onOk() {
-                setUsers(users.filter(user => user.key !== key));
-                message.success('删除成功');
+                userAPI.deleteUser(key).then(() => {
+                    getUsers();
+                    message.success('删除成功');
+                });
             },
         });
     };
@@ -121,10 +120,10 @@ const Users = () => {
         form.validateFields().then(values => {
             if (editingUser) {
                 // 更新现有用户
-                setUsers(users.map(user =>
-                    user.key === editingUser.key ? { ...user, ...values } : user
-                ));
-                message.success('用户更新成功');
+                userAPI.updateUser(editingUser.key, values).then(() => {
+                    getUsers();
+                    message.success('用户更新成功');
+                });
             } else {
                 // 添加新用户
                 const newUser = {
@@ -132,8 +131,10 @@ const Users = () => {
                     id: `USR${String(users.length + 1).padStart(3, '0')}`,
                     ...values,
                 };
-                setUsers([...users, newUser]);
-                message.success('用户添加成功');
+                userAPI.addUser(newUser).then(() => {
+                    getUsers();
+                    message.success('用户添加成功');
+                });
             }
             setIsModalVisible(false);
         });

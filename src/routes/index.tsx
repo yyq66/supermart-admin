@@ -6,6 +6,7 @@ import Dashboard from '../pages/Dashboard';
 import Users from '../pages/Users';
 import Products from '../pages/Products';
 import Profile from '../pages/Profile';
+import Settings from '../pages/Settings';
 
 // 权限守卫组件
 const RequireAuth = ({ children }: { children: React.ReactNode }) => {
@@ -39,6 +40,7 @@ const router = createBrowserRouter([
       { path: 'users', element: <Users /> },
       { path: 'products', element: <Products />},
       { path: 'profile', element: <Profile />},
+      { path: 'settings', element: <Settings />},
      
       { path: '*', element: <Navigate to="/products" replace />},
     ],
