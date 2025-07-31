@@ -2,32 +2,32 @@ import axios from 'axios';
 import type { Dayjs } from 'dayjs';
 
 interface User {
-    key: string;
-    id: string;
-    name: string;
-    email: string;
-    role: string;
-    status: string;
+  key: string;
+  id: string;
+  name: string;
+  email: string;
+  role: string;
+  status: string;
 }
 
 interface Product {
-    key: string;
-    id: string;
-    name: string;
-    category: string;
-    price: string;
-    stock: number;
-    sales?: number;
-    profit?: number;
-    image?: string;
-    description?: string;
-    brand?: string;
-    sku?: string;
-    status: 'active' | 'inactive' | 'out_of_stock';
-    minStock: number;
-    supplier?: string;
-    createTime?: string;
-    updateTime?: string;
+  key: string;
+  id: string;
+  name: string;
+  category: string;
+  price: string;
+  stock: number;
+  sales?: number;
+  profit?: number;
+  image?: string;
+  description?: string;
+  brand?: string;
+  sku?: string;
+  status: 'active' | 'inactive' | 'out_of_stock';
+  minStock: number;
+  supplier?: string;
+  createTime?: string;
+  updateTime?: string;
 }
 
 // 创建axios实例
@@ -62,14 +62,14 @@ api.interceptors.response.use(
   (error) => {
     if (error.response) {
       const { status, data } = error.response;
-      
+
       // switch (status) {
       //   case 401:
       //     // 处理401未授权错误
       //     console.warn('用户未授权或登录已过期');
       //     localStorage.removeItem('token');
       //     localStorage.removeItem('user');
-          
+
       //     // 如果当前不在登录页，则跳转到登录页
       //     if (window.location.pathname !== '/login') {
       //       // 保存当前页面路径，登录后可以跳转回来
@@ -77,33 +77,33 @@ api.interceptors.response.use(
       //       window.location.href = '/login';
       //     }
       //     break;
-          
+
       //   case 403:
       //     // 处理403权限不足错误
       //     console.error('权限不足，无法访问该资源');
       //     // 可以显示权限不足的提示
       //     break;
-          
+
       //   case 404:
       //     // 处理404资源不存在错误
       //     console.error('请求的资源不存在');
       //     break;
-          
+
       //   case 422:
       //     // 处理422数据验证错误
       //     console.error('数据验证失败:', data?.message || '请检查输入数据');
       //     break;
-          
+
       //   case 500:
       //     // 处理500服务器内部错误
       //     console.error('服务器内部错误，请稍后重试');
       //     break;
-          
+
       //   default:
       //     // 处理其他HTTP错误
       //     console.error(`请求失败 (${status}):`, data?.message || error.message);
       // }
-      
+
       // 如果后端返回了具体的错误信息，优先使用后端的错误信息
       if (data?.message) {
         error.message = data.message;
@@ -116,19 +116,19 @@ api.interceptors.response.use(
       // 其他错误
       console.error('请求配置错误:', error.message);
     }
-    
+
     return Promise.reject(error);
   }
 );
 
 // 修改登录API - 接收路径和参数
-export const loginAPI = async ( loginData: { username: string; password: string }) => {
+export const loginAPI = async (loginData: { username: string; password: string }) => {
   try {
     const response = await api.post('/auth/login', loginData);
     console.log(response)
     return response.data
   } catch (error: any) {
-      throw error;
+    throw error;
   }
 };
 
@@ -150,7 +150,7 @@ export const userAPI = {
   deleteUser: async (id: string) => {
     try {
       const response = await api.delete(`/users/${id}`);
-      console.log("删除用户成功",response.data)
+      console.log("删除用户成功", response.data)
       return {
         code: 200,
         message: '删除用户成功',
@@ -174,15 +174,43 @@ export const userAPI = {
   },
   addUser: async (userData: User) => {
     try {
-      console.log("添加用户",userData)
+      // console.log("添加用户", userData)
       const response = await api.post('/users', userData);
       return {
-        code: 200,
-        message: '添加用户成功',
-        data: response.data
+        success: true,
+        data: response.data,
+        message: '用户添加成功'
       }
-    } catch (error) {
-      throw new Error('添加用户失败');
+      // console.log(response)
+      // return response.data
+    } catch (error: any) {
+      // 处理不同类型的错误
+      if (error.response) {
+        const { status, data } = error.response;
+
+        // 处理邮箱已存在的情况（后端返回400状态码）
+        if (status === 400 && data.message === '邮箱已存在') {
+          return {
+            success: false,
+            error: 'EMAIL_EXISTS',
+            message: '该邮箱已被注册，请使用其他邮箱'
+          }
+        }
+
+        // 处理其他HTTP错误
+        return {
+          success: false,
+          error: 'HTTP_ERROR',
+          message: data.message || `请求失败 (${status})`
+        }
+      }
+
+      // 处理网络错误或其他错误
+      return {
+        success: false,
+        error: 'NETWORK_ERROR',
+        message: '网络连接失败，请检查网络后重试'
+      }
     }
   }
 }
@@ -279,9 +307,9 @@ export const productAPI = {
       const imageUrl = `/images/products/${Date.now()}_${file.name}`;
 
       // 更新商品图片
-    const response = await api.patch(`/products/${id}`, {
-      image: imageUrl
-    });
+      const response = await api.patch(`/products/${id}`, {
+        image: imageUrl
+      });
       return {
         code: 200,
         message: '图片上传成功',
@@ -329,7 +357,7 @@ export const productAPI = {
   //       createTime: new Date().toISOString(),
   //       updateTime: new Date().toISOString()
   //     };
-      
+
   //     const response = await api.post('/products', newProduct);
   //     return {
   //       code: 200,
@@ -358,19 +386,32 @@ export const productAPI = {
   // 批量更新商品状态
   batchUpdateStatus: async (ids: string[], status: 'active' | 'inactive') => {
     try {
-      const updatePromises = ids.map(id => 
-        api.patch(`/products/${id}`, { 
-          status, 
-          updateTime: new Date().toISOString() 
-        })
-      );
-      await Promise.all(updatePromises);
+      console.log({
+        ids,
+        status
+      })
+      const res = await api.patch('/products/batchStatus', {
+        ids,
+        status
+      })
       return {
-        code: 200,
-        message: `成功更新 ${ids.length} 个商品状态`
+        success: true,
+        data: res.data,
+        message: res.data.message
       };
-    } catch (error) {
-      throw new Error('批量更新状态失败');
+    } catch (error: any) {
+      if (error.response) {
+        return {
+          success: false,
+          error: 'HTTP_ERROR',
+          message: error.response.data.error || '批量更新失败'
+        };
+      }
+      return {
+        success: false,
+        error: 'NETWORK_ERROR',
+        message: '网络连接失败，请检查网络后重试'
+      };
     }
   },
 
@@ -378,25 +419,25 @@ export const productAPI = {
   // updateStock: async (id: string, stock: number, operation: 'set' | 'add' | 'subtract') => {
   //   try {
   //     let newStock = stock;
-      
+
   //     if (operation !== 'set') {
   //       // 先获取当前库存
   //       const currentProduct = await api.get(`/products/${id}`);
   //       const currentStock = currentProduct.data.stock;
-        
+
   //       if (operation === 'add') {
   //         newStock = currentStock + stock;
   //       } else if (operation === 'subtract') {
   //         newStock = Math.max(0, currentStock - stock);
   //       }
   //     }
-      
+
   //     const response = await api.patch(`/products/${id}`, { 
   //       stock: newStock,
   //       status: newStock === 0 ? 'out_of_stock' : 'active',
   //       updateTime: new Date().toISOString()
   //     });
-      
+
   //     return {
   //       code: 200,
   //       message: '库存更新成功',
@@ -411,10 +452,10 @@ export const productAPI = {
   getLowStockProducts: async () => {
     try {
       const response = await api.get('/products');
-      const lowStockProducts = response.data.filter((product: any) => 
+      const lowStockProducts = response.data.filter((product: any) =>
         product.stock <= product.minStock
       );
-      
+
       return {
         code: 200,
         message: '获取低库存商品成功',
@@ -430,7 +471,7 @@ export const productAPI = {
     try {
       const response = await api.get('/products');
       const categories = [...new Set(response.data.map((product: any) => product.category))];
-      
+
       return {
         code: 200,
         message: '获取分类列表成功',
@@ -446,11 +487,11 @@ export const productAPI = {
     try {
       const formData = new FormData();
       formData.append('image', file);
-      
+
       // 模拟图片上传，实际应该上传到文件服务器
       // const imageUrl = `/images/products/${Date.now()}_${file.name}`;
       const imageUrl = `https://api.dicebear.com/7.x/avataaars/svg?seed=${file.name}_${Date.now()}`
-      
+
       return {
         code: 200,
         message: '图片上传成功',
@@ -484,7 +525,7 @@ export const productAPI = {
     try {
       const response = await api.get('/products');
       const products = response.data;
-      
+
       const stats = {
         total: products.length,
         active: products.filter((p: any) => p.status === 'active').length,
@@ -494,7 +535,7 @@ export const productAPI = {
         totalValue: products.reduce((sum: number, p: any) => sum + (p.price * p.stock), 0),
         categories: [...new Set(products.map((p: any) => p.category))].length
       };
-      
+
       return {
         code: 200,
         message: '获取统计信息成功',
@@ -633,29 +674,22 @@ export const userInfoAPI = {
   },
 
   // 更新用户信息
-  updateUserProfile: async ( userData: any) => {
+  updateUserProfile: async (userData: any) => {
     const response = await api.put(`/userProfiles/userInfo`, userData);
     return response.data;
   },
 
   // 上传头像
-  uploadAvatar: async (userId: string, file: File) => {
-    // 模拟头像上传，实际项目中应该上传到文件服务器
-    const formData = new FormData();
-    formData.append('avatar', file);
-    
-    // 这里模拟返回一个头像URL
-    const avatarUrl = `https://api.dicebear.com/7.x/avataaars/svg?seed=${userId}_${Date.now()}`;
-    
+  uploadAvatar: async (formData: FormData) => {
+
     // 更新用户头像
-    const response = await api.patch(`/userProfiles/${userId}`, {
-      avatar: avatarUrl
+    const response = await api.post(`/userProfiles/avatar`, formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data', // 明确设置为 multipart/form-data
+      }
     });
-    
-    return {
-      avatarUrl,
-      user: response.data
-    };
+    // console.log(response.data)
+    return response.data
   },
 
   // 修改密码
@@ -666,7 +700,7 @@ export const userInfoAPI = {
     // 验证当前密码
     // const authResponse = await api.get('/auth');
     // const user = authResponse.data.find((u: any) => u.user.id.toString() === userId);
-    
+
     // if (!user || user.password !== passwordData.currentPassword) {
     //   throw new Error('当前密码错误');
     // }

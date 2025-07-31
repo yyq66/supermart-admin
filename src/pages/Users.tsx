@@ -131,10 +131,16 @@ const Users = () => {
                     id: `USR${String(users.length + 1).padStart(3, '0')}`,
                     ...values,
                 };
-                userAPI.addUser(newUser).then(() => {
-                    getUsers();
-                    message.success('用户添加成功');
-                });
+                userAPI.addUser(newUser).then(
+                    (req) => {
+                        if(req.success){
+                            getUsers();
+                            message.success('用户添加成功');
+                        }else{
+                            message.error(req.message);
+                        }
+                    }
+                );
             }
             setIsModalVisible(false);
         });
@@ -196,8 +202,8 @@ const Users = () => {
                         rules={[{ required: true, message: '请选择状态' }]}
                     >
                         <Select>
-                            <Select.Option value="活跃">活跃</Select.Option>
-                            <Select.Option value="停用">停用</Select.Option>
+                            <Select.Option value="active">活跃</Select.Option>
+                            <Select.Option value="inactive">停用</Select.Option>
                         </Select>
                     </Form.Item>
                 </Form>

@@ -121,11 +121,19 @@ const Profile: React.FC = () => {
   const handleAvatarUpload = async (file: File) => {
     if (!userInfo) return;
 
+    // console.log("file:",file)
+    const formData = new FormData();
+    formData.append('avatar', file);
+    // console.log("formData:",formData.get('avatar'))
+
     try {
       setLoading(true);
-      const result = await userInfoAPI.uploadAvatar(userInfo.id, file);
-      setUserInfo(prev => prev ? { ...prev, avatar: result.avatarUrl } : null);
-      message.success('头像更新成功！');
+      const res = await userInfoAPI.uploadAvatar(formData);
+      if(res.code === 200){
+        console.log("res.data.avatar:",res.data.avatar)
+        setUserInfo(prev => prev ? { ...prev, avatar: res.data.avatar } : null);
+        message.success('头像更新成功！');
+      }
     } catch (error) {
       message.error('头像上传失败');
     } finally {

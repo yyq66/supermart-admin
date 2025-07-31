@@ -3,7 +3,7 @@
     {
       "id": "1",
       "username": "admin",
-      "password": "123456",
+      "password": "$2a$10$0pHpYwka81/5pLlzH79rje4WSO9kmMGsff2GftDhSncBKwAh.scDO",
       "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9",
       "user": {
         "id": 1,
@@ -11,27 +11,8 @@
         "email": "admin@example.com",
         "role": "admin"
       }
-    },
-    {
-      "id": "c14a",
-      "username": "admin",
-      "password": "123456"
-    },
-    {
-      "id": "a77d",
-      "username": "admin",
-      "password": "123456"
-    },
-    {
-      "id": "c346",
-      "username": "admin",
-      "password": "123456"
-    },
-    {
-      "id": "7d0f",
-      "username": "admin",
-      "password": "123456"
     }
+    
   ],
   "userProfiles": [
     {
@@ -145,76 +126,6 @@
       "sales": 1500,
       "createTime": "2024-01-01T00:00:00.000Z",
       "updateTime": "2025-07-29T12:08:18.839Z"
-    },
-    {
-      "name": "111",
-      "sku": "111",
-      "category": "水果",
-      "price": 11,
-      "stock": 111,
-      "minStock": 10,
-      "supplier": "11",
-      "status": "active",
-      "description": "1",
-      "image": "https://api.dicebear.com/7.x/avataaars/svg?seed=b_c7a046cb619d77815f5ba0b9dec4156c.jpg_1753781233844",
-      "key": "P1753781197481",
-      "id": "P1753781197481",
-      "sales": 0,
-      "createTime": "2025-07-29T09:26:37.481Z",
-      "updateTime": "2025-07-29T11:14:20.077Z"
-    },
-    {
-      "name": "22",
-      "sku": "22",
-      "category": "水果",
-      "brand": "22",
-      "price": 22,
-      "stock": 22,
-      "minStock": 10,
-      "supplier": "2",
-      "status": "active",
-      "description": "2",
-      "image": "",
-      "key": "P1753781250894",
-      "id": "P1753781250894",
-      "sales": 0,
-      "createTime": "2025-07-29T09:27:30.894Z",
-      "updateTime": "2025-07-29T09:27:49.294Z"
-    },
-    {
-      "name": "333",
-      "sku": "333",
-      "category": "水果",
-      "brand": "3333",
-      "price": 333,
-      "stock": 33,
-      "minStock": 10,
-      "supplier": "33",
-      "status": "active",
-      "description": "33",
-      "image": "https://api.dicebear.com/7.x/avataaars/svg?seed=b_c7a046cb619d77815f5ba0b9dec4156c.jpg_1753781500653",
-      "key": "P1753781459530",
-      "id": "P1753781459530",
-      "sales": 0,
-      "createTime": "2025-07-29T09:30:59.530Z",
-      "updateTime": "2025-07-29T09:31:40.653Z"
-    },
-    {
-      "name": "555",
-      "sku": "55",
-      "category": "乳制品",
-      "price": 55,
-      "stock": 555,
-      "minStock": 10,
-      "supplier": "55",
-      "status": "active",
-      "description": "55",
-      "image": "https://api.dicebear.com/7.x/avataaars/svg?seed=b_c7a046cb619d77815f5ba0b9dec4156c.jpg_1753790863167",
-      "key": "P1753790863167",
-      "id": "P1753790863167",
-      "sales": 0,
-      "createTime": "2025-07-29T12:07:43.167Z",
-      "updateTime": "2025-07-29T12:07:58.454Z"
     }
   ],
   "orders": [

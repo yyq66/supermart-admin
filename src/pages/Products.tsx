@@ -191,7 +191,6 @@ const Products = () => {
                         }
                     }
                 ];
-
                 return (
                     <Dropdown
                         menu={{ items: menuItems }}
@@ -339,20 +338,19 @@ const Products = () => {
 
     // 批量操作
     const handleBatchDelete = () => {
-        if (selectedRowKeys.length === 0) {
-            message.warning('请选择要删除的商品');
-            return;
-        }
+        // if (selectedRowKeys.length === 0) {
+        //     message.warning('请选择要删除的商品');
+        //     return;
+        // }
 
-        // 第一步：确认删除
         Modal.confirm({
             title: '批量删除确认',
-            content: `确定要删除选中的 ${selectedRowKeys.length} 个商品吗？此操作需要安全验证。`,
+            content: `确定要删除选中的 ${selectedRowKeys.length} 个商品吗？`,
             okText: '确定删除',
             okType: 'danger',
             cancelText: '取消',
             width: 500,
-            onOk() {
+            async onOk() {
                 // 添加操作日志
                 logOperation({
                     action: 'batch_delete_products',
@@ -361,28 +359,36 @@ const Products = () => {
                     timestamp: new Date().toISOString()
                 });
 
-                productAPI.batchDeleteProducts(selectedRowKeys);
+                const res = await productAPI.batchDeleteProducts(selectedRowKeys);
                 getProducts();
                 setSelectedRowKeys([]);
-                message.success(`成功删除 ${selectedRowKeys.length} 个商品`);
+                message.success(res.message);
             },
         });
     };
 
     // 批量上架、下架
-    const handleBatchStatusChange = (status: string) => {
-        if (selectedRowKeys.length === 0) {
-            message.warning('请选择要操作的商品');
-            return;
-        }
+    const handleBatchStatusChange = async (status: 'active' | 'inactive') => {
+        // if (selectedRowKeys.length === 0) {
+        //     message.warning('请选择要操作的商品');
+        //     return;
+        // }
 
-        setProducts(products.map(product =>
-            selectedRowKeys.includes(product.key)
-                ? { ...product, status: status as Product['status'] }
-                : product
-        ));
-        setSelectedRowKeys([]);
-        message.success(`成功更新 ${selectedRowKeys.length} 个商品状态`);
+        try {
+            const res = await productAPI.batchUpdateStatus(selectedRowKeys as string[], status);
+            if(res.success){
+                 // 更新本地状态
+            setProducts(products.map(product =>
+                selectedRowKeys.includes(product.key)
+                    ? { ...product, status: status as Product['status'] }
+                    : product
+            ));
+            setSelectedRowKeys([]);
+            message.success(res.message || `成功更新 ${selectedRowKeys.length} 个商品状态`);
+            }
+        } catch (error) {
+            message.error('批量更新失败');
+        }
     };
 
     // 导出功能
